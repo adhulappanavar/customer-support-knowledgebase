@@ -1,0 +1,37 @@
+Customer Support Policy and Procedures
+
+1. Support Hours:
+   - Monday to Friday: 9:00 AM - 6:00 PM EST
+   - Weekend: 10:00 AM - 4:00 PM EST
+   - Emergency Support: 24/7 via hotline
+
+2. Contact Methods:
+   - Phone: 1-800-SUPPORT (1-800-787-7678)
+   - Email: support@company.com
+   - Live Chat: Available on website
+   - Ticket System: support.company.com
+
+3. Response Times:
+   - Critical Issues: 2 hours
+   - High Priority: 4 hours
+   - Normal Issues: 24 hours
+   - General Inquiries: 48 hours
+
+4. Password Reset Process:
+   - Visit password.company.com
+   - Enter email address
+   - Check email for reset link
+   - Click link and set new password
+   - Password must be 8+ characters with numbers and symbols
+
+5. Refund Policy:
+   - 30-day money-back guarantee
+   - Contact support within 30 days of purchase
+   - Provide order number and reason
+   - Refund processed within 5-7 business days
+
+6. Technical Support:
+   - Remote desktop assistance available
+   - Screen sharing for troubleshooting
+   - Knowledge base articles at help.company.com
+   - Video tutorials for common issues
