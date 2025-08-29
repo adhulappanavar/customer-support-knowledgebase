@@ -1,0 +1,27 @@
+# Core Framework Dependencies
+agno==0.1.0                    # Agno Framework for AI agents
+fastapi>=0.100.0               # Web framework for API
+uvicorn>=0.20.0                # ASGI server
+
+# Database and Vector Store
+lancedb>=0.4.0                 # Vector database for enhanced KB
+# sqlite3 is built into Python, no need to install
+
+# AI and ML
+openai>=1.0.0                  # OpenAI API integration
+numpy>=1.21.0                  # Numerical computing
+
+# Data Processing
+pydantic>=2.0.0                # Data validation
+python-dotenv>=1.0.0           # Environment management
+
+# Utilities
+python-multipart>=0.0.6        # File upload support
+httpx>=0.24.0                  # HTTP client for testing
+
+# Monitoring and Logging
+structlog>=23.0.0              # Structured logging
+
+# Development (optional)
+pytest>=7.0.0                  # Testing framework
+pytest-asyncio>=0.21.0         # Async testing support
