@@ -66,30 +66,30 @@ The Agno Framework is the core AI engine that powers the RAG API. It provides a 
 
 ```
 ┌─────────────────────────────────────────────────────────────────────────┐
-│                        Agno Framework                                  │
+│                        Agno Framework                                   │
 ├─────────────────────────────────────────────────────────────────────────┤
 │                                                                         │
-│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
-│  │     Agent       │    │   Knowledge     │    │     Tools       │    │
-│  │                 │    │     Base        │    │                 │    │
-│  │ • Orchestrates  │◄──►│ • Manages       │◄──►│ • PDF Reader    │    │
-│  │   all tools     │    │   document      │    │ • Text Chunker  │    │
-│  │ • Processes     │    │   lifecycle     │    │ • Vector        │    │
-│  │   user queries  │    │ • Coordinates   │    │   Indexer       │    │
-│  │ • Manages RAG   │    │   with LanceDB  │    │ • OpenAI        │    │
-│  │   workflow      │    │ • Handles       │    │   Integration   │    │
-│  │                 │    │   embeddings    │    │                 │    │
-│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
-│           │                       │                       │            │
-│           │                       │                       │            │
-│           ▼                       ▼                       ▼            │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐      │
+│  │     Agent       │    │   Knowledge     │    │     Tools       │      │
+│  │                 │    │     Base        │    │                 │      │
+│  │ • Orchestrates  │◄──►│ • Manages       │◄──►│ • PDF Reader    │      │
+│  │   all tools     │    │   document      │    │ • Text Chunker  │      │
+│  │ • Processes     │    │   lifecycle     │    │ • Vector        │      │
+│  │   user queries  │    │ • Coordinates   │    │   Indexer       │      │
+│  │ • Manages RAG   │    │   with LanceDB  │    │ • OpenAI        │      │
+│  │   workflow      │    │ • Handles       │    │   Integration   │      │
+│  │                 │    │   embeddings    │    │                 │      │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘      │
+│           │                       │                       │             │
+│           │                       │                       │             │
+│           ▼                       ▼                       ▼             │
 │  ┌─────────────────────────────────────────────────────────────────┐    │
 │  │                    LanceDB Integration                          │    │
 │  │                                                                 │    │
-│  │ • Stores document embeddings and chunks                        │    │
-│  │ • Provides vector search capabilities                          │    │
-│  │ • Enables semantic similarity search                           │    │
-│  │ • Maintains document metadata and relationships                │    │
+│  │ • Stores document embeddings and chunks                         │    │
+│  │ • Provides vector search capabilities                           │    │
+│  │ • Enables semantic similarity search                            │    │
+│  │ • Maintains document metadata and relationships                 │    │
 │  └─────────────────────────────────────────────────────────────────┘    │
 └─────────────────────────────────────────────────────────────────────────┘
 ```
@@ -134,11 +134,11 @@ The Agno Framework manages the knowledge base through:
 └─────────────┘    └─────────────┘    │ │      Agno Framework         │ │    └─────────────┘
        │                   │          │ │                             │ │            │
        │                   │          │ │ ┌─────────┐ ┌─────────────┐ │ │            │
-       ▼                   ▼          │ │ │  Agent │ │    Tools    │ │ │            │
-┌─────────────┐    ┌─────────────┐    │ │ │        │ │             │ │ │            ▼
-│   File      │    │   Form      │    │ │ │ • PDF  │ │ • PDF Reader│ │ │    ┌─────────────┐
-│   Selected  │    │   Data      │    │ │ │ Process│ │ • Chunker   │ │ │    │   Document  │
-└─────────────┘    └─────────────┘    │ │ │ • Store│ │ • Indexer   │ │ │    │   Indexed   │
+       ▼                   ▼          │ │ │  Agent │ │    Tools     │ │ │            │
+┌─────────────┐    ┌─────────────┐    │ │ │        │ │              │ │ │            ▼
+│   File      │    │   Form      │    │ │ │ • PDF  │ │ • PDF Reader │ │ │    ┌─────────────┐
+│   Selected  │    │   Data      │    │ │ │ Process│ │ • Chunker    │ │ │    │   Document  │
+└─────────────┘    └─────────────┘    │ │ │ • Store│ │ • Indexer    │ │ │    │   Indexed   │
                                       │ │ └─────────┘ └─────────────┘ │ │    └─────────────┘
                                       │ └─────────────────────────────┘ │
                                       └─────────────────────────────────┘
@@ -154,15 +154,15 @@ The Agno Framework manages the knowledge base through:
 └─────────────┘    └─────────────┘    │ │      Agno Framework         │ │    └─────────────┘
        │                   │          │ │                             │ │            │
        │                   │          │ │ ┌─────────┐ ┌─────────────┐ │ │            │
-       ▼                   ▼          │ │ │  Agent │ │    Tools    │ │ │            ▼
-┌─────────────┐    ┌─────────────┐    │ │ │        │ │             │ │ │    ┌─────────────┐
-│   Question  │    │   HTTP      │    │ │ │ • Query│ │ • Vector    │ │ │    │   Relevant  │
-│   Input     │    │   Request   │    │ │ │ Process│ │   Search    │ │ │    │   Documents │
-└─────────────┘    └─────────────┘    │ │ │ • RAG  │ │ • OpenAI   │ │ │    └─────────────┘
-                                      │ │ │ Logic  │ │   Integration│ │ │            │
-                                      │ │ └─────────┘ └─────────────┘ │ │            │
-                                      │ └─────────────────────────────┘ │            │
-                                      └─────────────────────────────────┘            │
+       ▼                   ▼          │ │ │  Agent │ │    Tools     │ │ │            ▼
+┌─────────────┐    ┌─────────────┐    │ │ │        │ │              │ │ │    ┌─────────────┐
+│   Question  │    │   HTTP      │    │ │ │ • Query│ │ • Vector     │ │ │    │   Relevant  │
+│   Input     │    │   Request   │    │ │ │ Process│ │   Search     │ │ │    │   Documents │
+└─────────────┘    └─────────────┘    │ │ │ • RAG  │ │ • OpenAI     │ │ │    └─────────────┘
+                                      │ │ │ Logic  │ │   Integration│ │ │           │
+                                      │ │ └─────────┘ └─────────────┘ │ │           │
+                                      │ └─────────────────────────────┘ │           │
+                                      └─────────────────────────────────┘           │
                                                               │                     │
                                                               ▼                     │
                                                        ┌─────────────┐              │
@@ -182,15 +182,15 @@ The Agno Framework manages the knowledge base through:
 │   AI Icon   │    │   from      │    │ │      Agno Framework         │ │    │   Based on  │
 └─────────────┘    └─────────────┘    │ │                             │ │    └─────────────┘
        │                   │          │ │ ┌─────────┐ ┌─────────────┐ │ │            │
-       │                   │          │ │ │  Agent │ │    Tools    │ │ │            ▼
-       ▼                   ▼          │ │ │        │ │             │ │ │    ┌─────────────┐
+       │                   │          │ │ │  Agent  │ │    Tools    │ │ │            ▼
+       ▼                   ▼          │ │ │         │ │             │ │ │    ┌─────────────┐
 ┌─────────────┐    ┌─────────────┐    │ │ │ • Ticket│ │ • Vector    │ │ │    │   Relevant  │
 │   Ticket    │    │   Formatted │    │ │ │ Analysis│ │   Search    │ │ │    │   Response  │
-│   Details   │    │   Query     │    │ │ │ • RAG   │ │ • OpenAI   │ │ │    │   with      │
-│   Displayed │    │   String    │    │ │ │ Logic  │ │   Integration│ │ │    │   Sources   │
+│   Details   │    │   Query     │    │ │ │ • RAG   │ │ • OpenAI    │ │ │    │   with      │
+│   Displayed │    │   String    │    │ │ │ Logic   │ │   Integration││ │    │   Sources   │
 └─────────────┘    └─────────────┘    │ │ └─────────┘ └─────────────┘ │ │    └─────────────┘
-                                      │ └─────────────────────────────┘ │            │
-                                      └─────────────────────────────────┘            │
+                                      │ └─────────────────────────────┘ │           │
+                                      └─────────────────────────────────┘           │
                                                               │                     │
                                                               ▼                     │
                                                        ┌─────────────┐              │
@@ -218,7 +218,7 @@ User          React UI        RAG API        Agno Framework        LanceDB
   │─Select PDF──►│              │              │                     │
   │              │─Upload File─►│              │                     │
   │              │              │─Receive File │                     │
-  │              │              │              │─Agent Orchestrates │
+  │              │              │              │─Agent Orchestrates  │
   │              │              │              │─PDF Reader Tool     │
   │              │              │              │─Text Chunker Tool   │
   │              │              │              │─Vector Indexer Tool │
@@ -238,48 +238,48 @@ User          React UI        RAG API        Agno Framework        LanceDB      
   │─Type Query──►│              │              │                     │              │
   │              │─Send Query──►│              │                     │              │
   │              │              │─Receive Query│                     │              │
-  │              │              │              │─Agent Processes    │
-  │              │              │              │─Query Intent       │
-  │              │              │              │─Vector Search Tool │
+  │              │              │              │─Agent Processes     │
+  │              │              │              │─Query Intent        │
+  │              │              │              │─Vector Search Tool  │
   │              │              │              │                     │─Search Vectors
   │              │              │              │                     │◄─Relevant Chunks
-  │              │              │              │─RAG Logic Tool     │
-  │              │              │              │─OpenAI Integration │              │
+  │              │              │              │─RAG Logic Tool      │
+  │              │              │              │─OpenAI Integration  │              │
   │              │              │              │                     │              │─Generate Response
   │              │              │              │                     │              │◄─AI Response
-  │              │              │              │◄─Formatted Answer  │              │
-  │              │              │◄─Response───│                     │              │
-  │              │◄─Response───│              │                     │              │
-  │◄─Response───│              │              │                     │              │
+  │              │              │              │◄─Formatted Answer   │              │
+  │              │              │◄─Response─-──│                     │              │
+  │              │◄─Response───-│              │                     │              │
+  │◄─Response─-──│              │              │                     │              │
 ```
 
 ### AI Resolution Sequence
 
 ```
 Support        React UI        RAG API        Agno Framework        LanceDB        OpenAI
-Agent          │              │              │                     │              │
+Agent            │              │              │                     │              │
   │              │              │              │                     │              │
   │─Click AI────►│              │              │                     │              │
-  │              │─Create Query│              │                     │              │
-  │              │─from Ticket │              │                     │              │
+  │              │─Create Query │              │                     │              │
+  │              │─from Ticket  │              │                     │              │
   │              │              │─Receive      │                     │              │
   │              │              │─Ticket Query │                     │              │
-  │              │              │              │─Agent Analyzes     │
-  │              │              │              │─Ticket Details     │
-  │              │              │              │─Formats Query      │
-  │              │              │              │─Vector Search Tool │
+  │              │              │              │─Agent Analyzes      │
+  │              │              │              │─Ticket Details      │
+  │              │              │              │─Formats Query       │
+  │              │              │              │─Vector Search Tool  │
   │              │              │              │                     │─Search Vectors
   │              │              │              │                     │◄─Relevant Docs
-  │              │              │              │─RAG Logic Tool     │
-  │              │              │              │─OpenAI Integration │              │
+  │              │              │              │─RAG Logic Tool      │
+  │              │              │              │─OpenAI Integration  │              │
   │              │              │              │                     │              │─Generate Solution
   │              │              │              │                     │              │◄─AI Solution
-  │              │              │              │◄─Formatted         │              │
-  │              │              │              │─Solution with      │              │
-  │              │              │              │─Sources            │              │
-  │              │              │◄─Solution───│                     │              │
-  │              │◄─Solution───│              │                     │              │
-  │◄─Solution───│              │              │                     │              │
+  │              │              │              │◄─Formatted          │              │
+  │              │              │              │─Solution with       │              │
+  │              │              │              │─Sources             │              │
+  │              │              │◄─Solution───-│                     │              │
+  │              │◄─Solution─-──│              │                     │              │
+  │◄─Solution──-─│              │              │                     │              │
 ```
 
 ## Flow Charts
