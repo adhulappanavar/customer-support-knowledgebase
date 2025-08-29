@@ -9,32 +9,32 @@ The Customer Support Knowledge Base system is a comprehensive solution that comb
 ```
 ┌─────────────────┐    ┌─────────────────────────────────────────────────┐    ┌─────────────────┐
 │   React UI      │    │                   RAG API                       │    │ Ticketing API   │
-│   (Port 3000)   │◄──►│                 (Port 8000)                    │    │  (Port 8001)    │
+│   (Port 3000)   │◄──►│                 (Port 8000)                     │    │  (Port 8001)    │
 │                 │    │                                                 │    │                 │
 │ • PDF Upload    │    │ ┌─────────────────────────────────────────────┐ │    │ • Ticket Mgmt   │
 │ • Knowledge     │    │ │              Agno Framework                 │ │    │ • Comments      │
 │   Query         │    │ │                                             │ │    │ • Statistics    │
-│ • Ticketing     │    │ │ ┌─────────────────┐ ┌─────────────────────┐ │ │    │ • User Mgmt     │
-└─────────────────┘    │ │ │   Agent        │ │     Tools           │ │ │    └─────────────────┘
-         │              │ │ │               │ │                     │ │ │             │
-         │              │ │ │ • Knowledge   │ │ • PDF Reader        │ │ │             │
-         ▼              │ │   Management   │ │ • Text Chunker      │ │ │             ▼
-┌─────────────────┐    │ │ • Query       │ │ • Vector Indexer    │ │ │    ┌─────────────────┐
-│   Browser       │    │ │   Processing  │ │ • OpenAI Integration│ │ │    │   SQLite DB     │
-│   Storage       │    │ │ • RAG Logic   │ │                     │ │ │    │   (tickets.db)  │
-│                 │    │ └───────────────┘ └─────────────────────┘ │ │    │                 │
-│ • Local State   │    │                     │                     │ │    │ • Tickets       │
-│ • Session Data  │    │                     ▼                     │ │    │ • Users         │
-└─────────────────┘    │ │           ┌─────────────────┐           │ │    │ • Categories    │
-                       │ │           │    LanceDB      │           │ │    └─────────────────┘
-                       │ │           │  Vector Store   │           │ │
-                       │ │           │                 │           │ │
-                       │ │           │ • Embeddings    │           │ │
-                       │ │           │ • Document      │           │ │
-                       │ │           │   Chunks        │           │ │
-                       │ │           │ • Vector Index  │           │ │
-                       │ └───────────┴─────────────────┴───────────┘ │
-                       └─────────────────────────────────────────────┘
+│ • Ticketing     │    │ │ ┌───────────────┐ ┌─────────────────────┐   │ |    │ • User Mgmt     │
+└─────────────────┘    │ │ │   Agent       │ │     Tools           │   │ |    └─────────────────┘
+         │             │ │ │               │ │                     │   │ |            │
+         │             │ │ │ • Knowledge   │ │ • PDF Reader        │   │ |            │
+         ▼             │ │ |  Management   │ │ • Text Chunker      │   │ |            ▼
+┌─────────────────┐    │ │ |• Query        │ │ • Vector Indexer    │   │ |   ┌─────────────────┐
+│   Browser       │    │ │ |  Processing   │ │ • OpenAI Integration│   │ |   │   SQLite DB     │
+│   Storage       │    │ │ |• RAG Logic    │ │                     │   │ |   │   (tickets.db)  │
+│                 │    │ | └───────────────┘ └─────────────────────┘   │ |   │                 │
+│ • Local State   │    │ |                    │                        │ |   │ • Tickets       │
+│ • Session Data  │    │ |                    ▼                        │ |   │ • Users         │
+└─────────────────┘    │ │           ┌─────────────────┐               │ │   | • Categories    │
+                       │ │           │    LanceDB      │               │ │   └─────────────────┘
+                       │ │           │  Vector Store   │               │ │
+                       │ │           │                 │               │ │
+                       │ │           │ • Embeddings    │               │ │
+                       │ │           │ • Document      │               │ │
+                       │ │           │   Chunks        │               │ │
+                       │ │           │ • Vector Index  │               │ │
+                       │ └───────────┴─────────────────┴──────────----─┘ │
+                       └────────────────────────────────────────────----─┘
 ```
 
 ## Component Details
@@ -213,48 +213,73 @@ The Agno Framework manages the knowledge base through:
 ### PDF Upload Sequence
 
 ```
-User          React UI        RAG API        LanceDB
-  │              │              │              │
-  │─Select PDF──►│              │              │
-  │              │─Upload File─►│              │
-  │              │              │─Process PDF──│
-  │              │              │              │─Store Vectors
-  │              │              │              │
-  │              │              │◄─Success─────│
-  │              │◄─Success─────│              │
-  │◄─Success─────│              │              │
+User          React UI        RAG API        Agno Framework        LanceDB
+  │              │              │              │                     │
+  │─Select PDF──►│              │              │                     │
+  │              │─Upload File─►│              │                     │
+  │              │              │─Receive File │                     │
+  │              │              │              │─Agent Orchestrates │
+  │              │              │              │─PDF Reader Tool     │
+  │              │              │              │─Text Chunker Tool   │
+  │              │              │              │─Vector Indexer Tool │
+  │              │              │              │                     │─Store Vectors
+  │              │              │              │                     │
+  │              │              │              │◄─Processing Complete│
+  │              │              │◄─Success─────│                     │
+  │              │◄─Success─────│              │                     │
+  │◄─Success─────│              │              │                     │
 ```
 
 ### Knowledge Query Sequence
 
 ```
-User          React UI        RAG API        LanceDB        OpenAI
-  │              │              │              │              │
-  │─Type Query──►│              │              │              │
-  │              │─Send Query──►│              │              │
-  │              │              │─Search──────►│              │
-  │              │              │              │◄─Chunks─────│
-  │              │              │─Generate────►│              │
-  │              │              │              │◄─Response───│
-  │              │              │◄─Answer─────│              │
-  │              │◄─Response───│              │              │
-  │◄─Response───│              │              │              │
+User          React UI        RAG API        Agno Framework        LanceDB        OpenAI
+  │              │              │              │                     │              │
+  │─Type Query──►│              │              │                     │              │
+  │              │─Send Query──►│              │                     │              │
+  │              │              │─Receive Query│                     │              │
+  │              │              │              │─Agent Processes    │
+  │              │              │              │─Query Intent       │
+  │              │              │              │─Vector Search Tool │
+  │              │              │              │                     │─Search Vectors
+  │              │              │              │                     │◄─Relevant Chunks
+  │              │              │              │─RAG Logic Tool     │
+  │              │              │              │─OpenAI Integration │              │
+  │              │              │              │                     │              │─Generate Response
+  │              │              │              │                     │              │◄─AI Response
+  │              │              │              │◄─Formatted Answer  │              │
+  │              │              │◄─Response───│                     │              │
+  │              │◄─Response───│              │                     │              │
+  │◄─Response───│              │              │                     │              │
 ```
 
 ### AI Resolution Sequence
 
 ```
-Agent         React UI        RAG API        LanceDB        OpenAI
-  │              │              │              │              │
-  │─Click AI────►│              │              │              │
-  │              │─Create Query►│              │              │
-  │              │              │─Search──────►│              │
-  │              │              │              │◄─Chunks─────│
-  │              │              │─Generate────►│              │
-  │              │              │              │◄─Solution───│
-  │              │              │◄─Response───│              │
-  │              │◄─Solution───│              │              │
-  │◄─Solution───│              │              │              │
+Support        React UI        RAG API        Agno Framework        LanceDB        OpenAI
+Agent          │              │              │                     │              │
+  │              │              │              │                     │              │
+  │─Click AI────►│              │              │                     │              │
+  │              │─Create Query│              │                     │              │
+  │              │─from Ticket │              │                     │              │
+  │              │              │─Receive      │                     │              │
+  │              │              │─Ticket Query │                     │              │
+  │              │              │              │─Agent Analyzes     │
+  │              │              │              │─Ticket Details     │
+  │              │              │              │─Formats Query      │
+  │              │              │              │─Vector Search Tool │
+  │              │              │              │                     │─Search Vectors
+  │              │              │              │                     │◄─Relevant Docs
+  │              │              │              │─RAG Logic Tool     │
+  │              │              │              │─OpenAI Integration │              │
+  │              │              │              │                     │              │─Generate Solution
+  │              │              │              │                     │              │◄─AI Solution
+  │              │              │              │◄─Formatted         │              │
+  │              │              │              │─Solution with      │              │
+  │              │              │              │─Sources            │              │
+  │              │              │◄─Solution───│                     │              │
+  │              │◄─Solution───│              │                     │              │
+  │◄─Solution───│              │              │                     │              │
 ```
 
 ## Flow Charts
@@ -295,86 +320,111 @@ Agent         React UI        RAG API        LanceDB        OpenAI
 ### PDF Processing Flow
 
 ```
-                    Start
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   PDF File      │
-              │   Selected      │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Upload to     │
-              │   RAG API       │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Extract Text  │
-              │   from PDF      │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Chunk Text    │
-              │   into Segments │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Generate      │
-              │   Embeddings    │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Store in      │
-              │   LanceDB       │
-              └─────────────────┘
-                      │
-                      ▼
-                    Success
+                     Start
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   PDF File      │
+               │   Selected      │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Upload to     │
+               │   RAG API       │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Agno Agent    │
+               │   Orchestrates  │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   PDF Reader    │
+               │   Tool          │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Text Chunker  │
+               │   Tool          │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Vector        │
+               │   Indexer Tool  │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Store in      │
+               │   LanceDB       │
+               └─────────────────┘
+                       │
+                       ▼
+                     Success
 ```
 
 ### Knowledge Query Flow
 
 ```
-                    Start
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   User Inputs   │
-              │   Query         │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Send to       │
-              │   RAG API       │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Vector        │
-              │   Search        │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Retrieve      │
-              │   Relevant      │
-              │   Chunks        │
-              └─────────────────┘
-                      │
-                      ▼
-              ┌─────────────────┐
-              │   Generate      │
-              │   AI Response   │
-              └─────────────────┘
-                      │
-                      ▼
-                    Success
+                     Start
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   User Inputs   │
+               │   Query         │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Send to       │
+               │   RAG API       │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Agno Agent    │
+               │   Processes     │
+               │   Query Intent  │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Vector Search │
+               │   Tool          │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Retrieve      │
+               │   Relevant      │
+               │   Chunks        │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   RAG Logic     │
+               │   Tool          │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   OpenAI        │
+               │   Integration   │
+               └─────────────────┘
+                       │
+                       ▼
+               ┌─────────────────┐
+               │   Generate      │
+               │   AI Response   │
+               └─────────────────┘
+                       │
+                       ▼
+                     Success
 ```
 
 ## Data Models
