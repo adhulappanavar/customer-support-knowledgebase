@@ -7,26 +7,34 @@ The Customer Support Knowledge Base system is a comprehensive solution that comb
 ## System Architecture
 
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   React UI      │    │   RAG API       │    │ Ticketing API   │
-│   (Port 3000)   │◄──►│   (Port 8000)   │    │  (Port 8001)    │
-│                 │    │                 │    │                 │
-│ • PDF Upload    │    │ • PDF Processing│    │ • Ticket Mgmt   │
-│ • Knowledge     │    │ • Vector Search │    │ • Comments      │
-│   Query         │    │ • AI Generation │    │ • Statistics    │
-│ • Ticketing     │    │ • Document Store│    │ • User Mgmt     │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-         │                       │                       │
-         │                       │                       │
-         ▼                       ▼                       ▼
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Browser       │    │   LanceDB       │    │   SQLite DB     │
-│   Storage       │    │   Vector Store  │    │   (tickets.db)  │
-│                 │    │                 │    │                 │
-│ • Local State   │    │ • Embeddings    │    │ • Tickets       │
-│ • Session Data  │    │ • Document      │    │ • Users         │
-│                 │    │   Chunks        │    │ • Categories    │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
+┌─────────────────┐    ┌─────────────────────────────────────────────────┐    ┌─────────────────┐
+│   React UI      │    │                   RAG API                       │    │ Ticketing API   │
+│   (Port 3000)   │◄──►│                 (Port 8000)                    │    │  (Port 8001)    │
+│                 │    │                                                 │    │                 │
+│ • PDF Upload    │    │ ┌─────────────────────────────────────────────┐ │    │ • Ticket Mgmt   │
+│ • Knowledge     │    │ │              Agno Framework                 │ │    │ • Comments      │
+│   Query         │    │ │                                             │ │    │ • Statistics    │
+│ • Ticketing     │    │ │ ┌─────────────────┐ ┌─────────────────────┐ │ │    │ • User Mgmt     │
+└─────────────────┘    │ │ │   Agent        │ │     Tools           │ │ │    └─────────────────┘
+         │              │ │ │               │ │                     │ │ │             │
+         │              │ │ │ • Knowledge   │ │ • PDF Reader        │ │ │             │
+         ▼              │ │   Management   │ │ • Text Chunker      │ │ │             ▼
+┌─────────────────┐    │ │ • Query       │ │ • Vector Indexer    │ │ │    ┌─────────────────┐
+│   Browser       │    │ │   Processing  │ │ • OpenAI Integration│ │ │    │   SQLite DB     │
+│   Storage       │    │ │ • RAG Logic   │ │                     │ │ │    │   (tickets.db)  │
+│                 │    │ └───────────────┘ └─────────────────────┘ │ │    │                 │
+│ • Local State   │    │                     │                     │ │    │ • Tickets       │
+│ • Session Data  │    │                     ▼                     │ │    │ • Users         │
+└─────────────────┘    │ │           ┌─────────────────┐           │ │    │ • Categories    │
+                       │ │           │    LanceDB      │           │ │    └─────────────────┘
+                       │ │           │  Vector Store   │           │ │
+                       │ │           │                 │           │ │
+                       │ │           │ • Embeddings    │           │ │
+                       │ │           │ • Document      │           │ │
+                       │ │           │   Chunks        │           │ │
+                       │ │           │ • Vector Index  │           │ │
+                       │ └───────────┴─────────────────┴───────────┘ │
+                       └─────────────────────────────────────────────┘
 ```
 
 ## Component Details
@@ -37,75 +45,159 @@ The Customer Support Knowledge Base system is a comprehensive solution that comb
 - **Technology**: React + TypeScript + Material-UI
 
 ### 2. RAG API (Knowledge Engine)
-- **Purpose**: Process PDFs and provide AI-powered responses
-- **Features**: Document ingestion, vector search, AI generation
-- **Technology**: FastAPI + Agno + LanceDB + OpenAI
+- **Purpose**: Process PDFs and provide AI-powered responses using Agno framework
+- **Features**: Document ingestion, vector search, AI generation, intelligent agents
+- **Technology**: FastAPI + Agno Framework + LanceDB + OpenAI
+- **Agno Components**:
+  - **Agent**: Central intelligence for knowledge management and query processing
+  - **Tools**: PDF Reader, Text Chunker, Vector Indexer, OpenAI Integration
+  - **Knowledge Base**: LanceDB integration for vector storage and retrieval
 
 ### 3. Ticketing API (Support System)
 - **Purpose**: Manage customer support tickets and workflows
 - **Features**: CRUD operations, comments, statistics
 - **Technology**: FastAPI + SQLite
 
+## Agno Framework Architecture
+
+The Agno Framework is the core AI engine that powers the RAG API. It provides a structured approach to building intelligent agents with specialized tools.
+
+### Agno Components
+
+```
+┌─────────────────────────────────────────────────────────────────────────┐
+│                        Agno Framework                                  │
+├─────────────────────────────────────────────────────────────────────────┤
+│                                                                         │
+│  ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐    │
+│  │     Agent       │    │   Knowledge     │    │     Tools       │    │
+│  │                 │    │     Base        │    │                 │    │
+│  │ • Orchestrates  │◄──►│ • Manages       │◄──►│ • PDF Reader    │    │
+│  │   all tools     │    │   document      │    │ • Text Chunker  │    │
+│  │ • Processes     │    │   lifecycle     │    │ • Vector        │    │
+│  │   user queries  │    │ • Coordinates   │    │   Indexer       │    │
+│  │ • Manages RAG   │    │   with LanceDB  │    │ • OpenAI        │    │
+│  │   workflow      │    │ • Handles       │    │   Integration   │    │
+│  │                 │    │   embeddings    │    │                 │    │
+│  └─────────────────┘    └─────────────────┘    └─────────────────┘    │
+│           │                       │                       │            │
+│           │                       │                       │            │
+│           ▼                       ▼                       ▼            │
+│  ┌─────────────────────────────────────────────────────────────────┐    │
+│  │                    LanceDB Integration                          │    │
+│  │                                                                 │    │
+│  │ • Stores document embeddings and chunks                        │    │
+│  │ • Provides vector search capabilities                          │    │
+│  │ • Enables semantic similarity search                           │    │
+│  │ • Maintains document metadata and relationships                │    │
+│  └─────────────────────────────────────────────────────────────────┘    │
+└─────────────────────────────────────────────────────────────────────────┘
+```
+
+### Agent Capabilities
+
+The Agno Agent serves as the central intelligence that:
+
+1. **Orchestrates Workflows**: Coordinates between different tools and data sources
+2. **Manages Knowledge**: Handles document ingestion, processing, and storage
+3. **Processes Queries**: Understands user intent and routes requests appropriately
+4. **Implements RAG Logic**: Combines retrieval and generation for intelligent responses
+5. **Integrates External Services**: Connects with OpenAI for advanced language processing
+
+### Tool Integration
+
+Each tool in the Agno Framework has a specific responsibility:
+
+- **PDF Reader**: Extracts text content from uploaded PDF documents
+- **Text Chunker**: Breaks down documents into manageable chunks for processing
+- **Vector Indexer**: Converts text chunks into vector embeddings for storage
+- **OpenAI Integration**: Provides advanced language model capabilities for response generation
+
+### Knowledge Base Management
+
+The Agno Framework manages the knowledge base through:
+
+1. **Document Lifecycle**: From upload to indexed storage
+2. **Vector Operations**: Embedding generation and similarity search
+3. **Metadata Management**: Document categorization and relationship tracking
+4. **Query Processing**: Intelligent retrieval based on user intent
+
 ## Data Flow Diagrams
 
 ### PDF Ingestion Flow
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   User      │    │   React UI  │    │   RAG API   │    │   LanceDB   │
-│   Uploads   │───►│   Sends     │───►│   Processes │───►│   Stores    │
-│   PDF       │    │   File      │    │   Document  │    │   Vectors   │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-       │                   │                   │                   │
-       │                   │                   │                   │
-       ▼                   ▼                   ▼                   ▼
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   File      │    │   Form      │    │   Text      │    │   Document  │
-│   Selected  │    │   Data      │    │   Chunking  │    │   Indexed   │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+┌─────────────┐    ┌─────────────┐    ┌─────────────────────────────────┐    ┌─────────────┐
+│   User      │    │   React UI  │    │           RAG API               │    │   LanceDB   │
+│   Uploads   │───►│   Sends     │───►│                                 │───►│   Stores    │
+│   PDF       │    │   File      │    │ ┌─────────────────────────────┐ │    │   Vectors   │
+└─────────────┘    └─────────────┘    │ │      Agno Framework         │ │    └─────────────┘
+       │                   │          │ │                             │ │            │
+       │                   │          │ │ ┌─────────┐ ┌─────────────┐ │ │            │
+       ▼                   ▼          │ │ │  Agent │ │    Tools    │ │ │            │
+┌─────────────┐    ┌─────────────┐    │ │ │        │ │             │ │ │            ▼
+│   File      │    │   Form      │    │ │ │ • PDF  │ │ • PDF Reader│ │ │    ┌─────────────┐
+│   Selected  │    │   Data      │    │ │ │ Process│ │ • Chunker   │ │ │    │   Document  │
+└─────────────┘    └─────────────┘    │ │ │ • Store│ │ • Indexer   │ │ │    │   Indexed   │
+                                      │ │ └─────────┘ └─────────────┘ │ │    └─────────────┘
+                                      │ └─────────────────────────────┘ │
+                                      └─────────────────────────────────┘
 ```
 
 ### Knowledge Query Flow
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   User      │    │   React UI  │    │   RAG API   │    │   LanceDB   │
-│   Types     │───►│   Sends     │───►│   Searches  │───►│   Returns   │
-│   Query     │    │   Query     │    │   Vectors   │    │   Chunks    │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-       │                   │                   │                   │
-       │                   │                   │                   │
-       ▼                   ▼                   ▼                   ▼
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Question  │    │   HTTP      │    │   Vector    │    │   Relevant  │
-│   Input     │    │   Request   │    │   Search    │    │   Documents │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-                              │                   │
-                              ▼                   ▼
-                       ┌─────────────┐    ┌─────────────┐
-                       │   OpenAI    │    │   Response  │
-                       │   Generates │◄───│   with      │
-                       │   Answer    │    │   Sources   │
-                       └─────────────┘    └─────────────┘
+┌─────────────┐    ┌─────────────┐    ┌─────────────────────────────────┐    ┌─────────────┐
+│   User      │    │   React UI  │    │           RAG API               │    │   LanceDB   │
+│   Types     │───►│   Sends     │───►│                                 │───►│   Returns   │
+│   Query     │    │   Query     │    │ ┌─────────────────────────────┐ │    │   Chunks    │
+└─────────────┘    └─────────────┘    │ │      Agno Framework         │ │    └─────────────┘
+       │                   │          │ │                             │ │            │
+       │                   │          │ │ ┌─────────┐ ┌─────────────┐ │ │            │
+       ▼                   ▼          │ │ │  Agent │ │    Tools    │ │ │            ▼
+┌─────────────┐    ┌─────────────┐    │ │ │        │ │             │ │ │    ┌─────────────┐
+│   Question  │    │   HTTP      │    │ │ │ • Query│ │ • Vector    │ │ │    │   Relevant  │
+│   Input     │    │   Request   │    │ │ │ Process│ │   Search    │ │ │    │   Documents │
+└─────────────┘    └─────────────┘    │ │ │ • RAG  │ │ • OpenAI   │ │ │    └─────────────┘
+                                      │ │ │ Logic  │ │   Integration│ │ │            │
+                                      │ │ └─────────┘ └─────────────┘ │ │            │
+                                      │ └─────────────────────────────┘ │            │
+                                      └─────────────────────────────────┘            │
+                                                              │                     │
+                                                              ▼                     │
+                                                       ┌─────────────┐              │
+                                                       │   OpenAI    │              │
+                                                       │   Generates │◄─────────────┘
+                                                       │   Answer    │
+                                                       └─────────────┘
 ```
 
 ### AI Resolution Flow
 
 ```
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Support   │    │   React UI  │    │   RAG API   │    │   AI        │
-│   Agent     │───►│   Creates   │───►│   Receives  │───►│   Generates │
-│   Clicks    │    │   Query     │    │   Ticket    │    │   Solution  │
-│   AI Icon   │    │   from      │    │   Details   │    │   Based on  │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
-       │                   │                   │                   │
-       │                   │                   │                   │
-       ▼                   ▼                   ▼                   ▼
-┌─────────────┐    ┌─────────────┐    ┌─────────────┐    ┌─────────────┐
-│   Ticket    │    │   Formatted │    │   Knowledge │    │   Relevant  │
-│   Details   │    │   Query     │    │   Base      │    │   Response  │
-│   Displayed │    │   String    │    │   Search    │    │   with      │
-└─────────────┘    └─────────────┘    └─────────────┘    └─────────────┘
+┌─────────────┐    ┌─────────────┐    ┌─────────────────────────────────┐    ┌─────────────┐
+│   Support   │    │   React UI  │    │           RAG API               │    │   AI        │
+│   Agent     │───►│   Creates   │───►│                                 │───►│   Generates │
+│   Clicks    │    │   Query     │    │ ┌─────────────────────────────┐ │    │   Solution  │
+│   AI Icon   │    │   from      │    │ │      Agno Framework         │ │    │   Based on  │
+└─────────────┘    └─────────────┘    │ │                             │ │    └─────────────┘
+       │                   │          │ │ ┌─────────┐ ┌─────────────┐ │ │            │
+       │                   │          │ │ │  Agent │ │    Tools    │ │ │            ▼
+       ▼                   ▼          │ │ │        │ │             │ │ │    ┌─────────────┐
+┌─────────────┐    ┌─────────────┐    │ │ │ • Ticket│ │ • Vector    │ │ │    │   Relevant  │
+│   Ticket    │    │   Formatted │    │ │ │ Analysis│ │   Search    │ │ │    │   Response  │
+│   Details   │    │   Query     │    │ │ │ • RAG   │ │ • OpenAI   │ │ │    │   with      │
+│   Displayed │    │   String    │    │ │ │ Logic  │ │   Integration│ │ │    │   Sources   │
+└─────────────┘    └─────────────┘    │ │ └─────────┘ └─────────────┘ │ │    └─────────────┘
+                                      │ └─────────────────────────────┘ │            │
+                                      └─────────────────────────────────┘            │
+                                                              │                     │
+                                                              ▼                     │
+                                                       ┌─────────────┐              │
+                                                       │   OpenAI    │              │
+                                                       │   Generates │◄─────────────┘
+                                                       │   Solution  │
+                                                       └─────────────┘
                                                               │
                                                               ▼
                                                        ┌─────────────┐
@@ -342,10 +434,12 @@ QueryResponse
 - **Uvicorn** - ASGI server
 
 ### AI & Knowledge
-- **Agno** - AI agent framework
-- **OpenAI** - Language model
-- **LanceDB** - Vector database
-- **PyPDF2** - PDF processing
+- **Agno Framework** - Core AI agent framework with intelligent tools and agents
+- **Agno Agent** - Central intelligence for knowledge management and RAG operations
+- **Agno Tools** - Specialized tools for PDF processing, text chunking, and vector operations
+- **OpenAI** - Language model integration for advanced text generation
+- **LanceDB** - Vector database for storing and searching document embeddings
+- **PyPDF2** - PDF text extraction and processing
 
 ### Database
 - **SQLite** - Ticketing data

@@ -122,14 +122,14 @@ pip list
 ```
 Package                Version
 ---------------------- -------
-agno                   0.1.0
-fastapi                0.104.1
-lancedb                0.4.0
-openai                 1.3.0
-pydantic               2.5.0
-PyPDF2                 3.0.1
-python-dotenv         1.0.0
-uvicorn                0.24.0
+agno                   0.1.0          # Agno Framework for AI agents
+fastapi                0.104.1        # Web framework
+lancedb                0.4.0          # Vector database
+openai                 1.3.0          # OpenAI API integration
+pydantic               2.5.0          # Data validation
+PyPDF2                 3.0.1          # PDF processing
+python-dotenv         1.0.0          # Environment management
+uvicorn                0.24.0         # ASGI server
 ...
 ```
 
@@ -245,6 +245,9 @@ cd ../cskb-api
 
 # Check if all dependencies are installed
 python3 -c "import fastapi, agno, lancedb, openai, PyPDF2; print('All dependencies imported successfully')"
+
+# Verify Agno Framework installation
+python3 -c "from agno.agent import Agent; from agno.vectordb.lancedb import LanceDb; print('Agno Framework components imported successfully')"
 ```
 
 **Expected Output:**
@@ -594,6 +597,23 @@ curl -H "Authorization: Bearer $OPENAI_API_KEY" \
 cd cskb-ticketing-app
 rm -f tickets.db
 python3 main.py
+```
+
+#### 6. Agno Framework Issues
+
+**Symptoms:** Import errors or "module not found" for agno
+
+**Solution:** 
+```bash
+# Reinstall Agno Framework
+pip uninstall agno
+pip install agno
+
+# Verify installation
+python3 -c "import agno; print(agno.__version__)"
+
+# Check Agno components
+python3 -c "from agno.agent import Agent; from agno.vectordb.lancedb import LanceDb; print('Agno Framework components imported successfully')"
 ```
 
 ### Debug Commands

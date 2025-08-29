@@ -15,7 +15,7 @@ A comprehensive AI-powered customer support system that combines intelligent kno
 
 The system consists of three main components:
 
-- **RAG API** (Port 8000): FastAPI-based knowledge engine with Agno + LanceDB
+- **RAG API** (Port 8000): FastAPI-based knowledge engine powered by Agno Framework with LanceDB integration
 - **Ticketing API** (Port 8001): FastAPI-based ticket management system
 - **React UI** (Port 3000): Modern web interface for all operations
 
@@ -77,10 +77,10 @@ cd cskb-react-ui && npm start
 
 ### Backend
 - **FastAPI** - Modern Python web framework
-- **Agno** - AI agent framework
-- **LanceDB** - Vector database for embeddings
-- **OpenAI** - Language model integration
-- **PyPDF2** - PDF text extraction
+- **Agno Framework** - AI agent framework with intelligent tools and agents
+- **LanceDB** - Vector database for embeddings and semantic search
+- **OpenAI** - Language model integration for advanced text generation
+- **PyPDF2** - PDF text extraction and processing
 
 ### Frontend
 - **React 18** - User interface framework
