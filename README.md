@@ -1,313 +1,227 @@
-# Customer Support Knowledge Base (CSKB) - Feedback Agents & React UI
+# E2E Scenario 1: Enhanced Knowledge Base Workflow with Complete Feedback Loop
 
-A sophisticated feedback learning system that automatically processes customer support feedback and builds an enhanced knowledge base using AI agents and machine learning.
+## 🎯 Overview
 
-## 🚀 System Overview
+This repository contains a comprehensive End-to-End (E2E) testing implementation for the Customer Support Knowledge Base (CSKB) system. The enhanced workflow tests the complete AI-powered ticket resolution process, including human feedback integration and enhanced knowledge base population in LanceDB.
 
-The CSKB Feedback Agents system transforms customer feedback into actionable knowledge through:
-- **Intelligent Feedback Processing**: AI agents analyze feedback patterns and extract insights
-- **Enhanced Knowledge Base**: Automatically populated with solutions from human feedback
-- **Learning Loop**: Continuous improvement through feedback analysis
-- **Modern React UI**: Intuitive dashboard for monitoring and querying the system
+## 🚀 Enhanced Workflow Features
 
-## 🏗️ Architecture
+### Complete 7-Step Process
+1. **API Health Check** - Verify both CSKB and Feedback APIs are healthy
+2. **PDF Ingestion** - Ingest technical documentation into the knowledge base
+3. **Support Ticket Creation** - Generate unique test tickets for workflow testing
+4. **Initial AI Response** - Generate AI-powered responses using RAG (Retrieval-Augmented Generation)
+5. **Human Agent Review** - Simulate human agent analysis and feedback generation
+6. **Feedback Storage** - Store human feedback in the feedback database
+7. **Enhanced KB Population** - Ingest feedback into LanceDB as Enhanced Knowledge Base
 
-### Backend Components
-- **FeedbackAgent**: Collects and processes customer feedback
-- **LearningAgent**: Extracts insights and populates knowledge base
-- **AgentCommunicationBus**: Coordinates communication between agents
-- **Enhanced Knowledge Base**: LanceDB-powered vector database for solutions
-- **SQLite Database**: Stores feedback entries and metadata
+### Key Capabilities
+- **Automated Testing** - Complete workflow automation with detailed logging
+- **Human Feedback Simulation** - Realistic feedback generation based on AI response quality
+- **Performance Monitoring** - Response time tracking and performance metrics
+- **Comprehensive Reporting** - Detailed markdown reports with test results and analysis
+- **Error Handling** - Robust error handling and detailed failure reporting
 
-### Frontend Components
-- **Dashboard**: System overview with real-time metrics
-- **Feedback History**: View and analyze all feedback entries
-- **Enhanced KB**: Explore knowledge base solutions
-- **Agent Status**: Monitor agent health and performance
-- **Query Tool**: Interactive knowledge base querying interface
+## 📁 File Structure
 
-## 🛠️ Technology Stack
+### Core Implementation Files
+- **`v4_e2e_scenario1_enhanced_with_report.py`** - **MAIN FILE** - Complete enhanced workflow with report generation
+- **`e2e_scenario1_enhanced_with_report.py`** - Enhanced workflow implementation with reporting
+- **`e2e_scenario1_final_working.py`** - Working version of the enhanced workflow
+- **`e2e_scenario1_with_report.py`** - Simplified version with basic reporting
 
-### Backend
-- **Python 3.12+**: Core application logic
-- **FastAPI**: High-performance web framework
-- **LanceDB**: Vector database for knowledge storage
-- **SQLite**: Relational database for feedback storage
-- **Pandas**: Data processing and analysis
-- **Structlog**: Structured logging
+### Test Reports
+- **`e2e_scenario1_enhanced_report_*.md`** - Generated test reports with detailed results
+- **`e2e_scenario1_report_*.md`** - Basic test reports
 
-### Frontend
-- **React 18**: Modern UI framework
-- **TypeScript**: Type-safe development
-- **Tailwind CSS**: Utility-first styling
-- **React Router**: Client-side routing
-- **Axios**: HTTP client for API communication
-- **Recharts**: Data visualization
-- **React Hook Form**: Form management
+### Documentation
+- **`E2EScenario1.md`** - Gherkin format scenario specification
+- **`requirements.txt`** - Python dependencies
+- **`README.md`** - This file
 
-## 📋 Prerequisites
+## 🛠️ Prerequisites
 
-- Python 3.12 or higher
-- Node.js 18+ and npm
-- Git
+### System Requirements
+- Python 3.8+
+- Access to CSKB API (localhost:8000)
+- Access to Feedback Agents API (localhost:8002)
+- PDF files for testing (located in `../../pdf-files/`)
+
+### Python Dependencies
+```bash
+pip install -r requirements.txt
+```
+
+Required packages:
+- `requests` - HTTP client for API interactions
+- `logging` - Built-in Python logging
+- `datetime` - Built-in Python datetime handling
+- `random` - Built-in Python random number generation
 
 ## 🚀 Quick Start
 
-### 1. Clone the Repository
+### 1. Run the Enhanced Workflow
 ```bash
-git clone <your-repo-url>
-cd customer-support-knowledgebase
+python3 v4_e2e_scenario1_enhanced_with_report.py
 ```
 
-### 2. Backend Setup
-```bash
-cd cskb-feedback-agents
+### 2. Expected Output
+The script will:
+- Execute all 7 workflow steps
+- Generate detailed logs for each step
+- Create a comprehensive markdown report
+- Save the report with timestamp
 
-# Create virtual environment
-python -m venv venv
-
-# Activate virtual environment
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Set up environment variables
-cp .env.example .env
-# Edit .env with your configuration
-
-# Start the backend server
-python main.py
+### 3. Sample Output
+```
+🚀 Starting Enhanced E2E Scenario 1 with Complete Feedback Loop and Report Generation...
+✅ Both APIs are healthy
+✅ PDF ingested successfully
+✅ Support ticket created: E2E-TEST-1756566491
+✅ Initial AI response generated successfully
+✅ Human agent review completed with rating: 5/5
+✅ Human feedback submitted successfully
+✅ Feedback successfully ingested into enhanced knowledge base
+📄 Test report saved to: e2e_scenario1_enhanced_report_20250830_203824.md
 ```
 
-The backend will be available at `http://localhost:8002`
+## 📊 Test Report Features
 
-### 3. Frontend Setup
-```bash
-cd cskb-feedback-agent-reactui
+### Comprehensive Reporting
+- **Test Execution Summary** - Timing, success rates, and statistics
+- **Step-by-Step Results** - Detailed results for each workflow step
+- **Performance Analysis** - Response time breakdown and metrics
+- **Test Data Summary** - Document IDs, ticket information, and AI response analysis
+- **Human Feedback Analysis** - Ratings, confidence scores, and improvement suggestions
 
-# Install dependencies
-npm install
-
-# Start the development server
-npm start
-```
-
-The React UI will be available at `http://localhost:3000`
+### Report Sections
+1. **Executive Summary** - High-level test results and statistics
+2. **Test Objective** - Clear description of what is being tested
+3. **Test Data Summary** - All relevant data from the test execution
+4. **Detailed Step Results** - Complete information for each workflow step
+5. **Performance Analysis** - Response times and performance metrics
+6. **Test Conclusions** - What worked well and areas for improvement
 
 ## 🔧 Configuration
 
-### Environment Variables (.env)
-```bash
-# Database Configuration
-DB_PATH=./data/feedback.db
-ENHANCED_KB_PATH=./data/enhanced_kb
+### API Endpoints
+- **CSKB API**: `http://localhost:8000`
+  - `/health` - Health check
+  - `/ingest/pdf` - PDF ingestion
+  - `/query` - Knowledge base querying
+  - `/documents` - Document listing
 
-# Server Configuration
-HOST=0.0.0.0
-PORT=8002
+- **Feedback API**: `http://localhost:8002`
+  - `/health` - Health check
+  - `/feedback` - Feedback submission
+  - `/enhanced-kb/populate` - Enhanced KB population
 
-# Logging
-LOG_LEVEL=INFO
-```
+### Test Parameters
+- **PDF Path**: `../../pdf-files/technical_troubleshooting_guide.pdf`
+- **Issue Description**: Network connectivity problems after system updates
+- **Document Category**: Technical Support
+- **Ticket Priority**: Medium
 
-## 📊 API Endpoints
+## 🧪 Testing Scenarios
 
-### Feedback Management
-- `GET /feedback` - Get all feedback entries with pagination
-- `GET /feedback/{ticket_id}` - Get feedback by ticket ID
-- `POST /feedback` - Submit new feedback
-- `GET /feedback/stats` - Get feedback statistics
+### Primary Scenario: Complete Knowledge Base Enhancement
+This scenario validates the end-to-end workflow where:
+1. Initial knowledge base provides AI-generated responses
+2. Human agents review and provide feedback
+3. Feedback is stored and used to enhance the knowledge base
+4. Enhanced knowledge base improves future AI responses
 
-### Enhanced Knowledge Base
-- `GET /enhanced-kb/stats` - Get KB statistics
-- `GET /enhanced-kb/solutions` - Get all solutions
-- `GET /enhanced-kb/solutions/{category}` - Get solutions by category
-- `POST /enhanced-kb/populate` - Manually trigger KB population
+### Test Validation Points
+- **API Connectivity** - Both services are accessible and healthy
+- **Document Processing** - PDFs are successfully ingested and processed
+- **AI Response Quality** - RAG-based responses are generated with source documents
+- **Feedback Integration** - Human feedback is properly captured and stored
+- **Enhanced KB Population** - Feedback successfully populates the enhanced knowledge base
 
-### System Monitoring
-- `GET /system/health` - System health check
-- `GET /agents/status` - Agent status and metrics
+## 📈 Performance Metrics
 
-## 🎯 Features
+### Response Time Tracking
+- **API Health Check**: ~26ms
+- **PDF Ingestion**: ~86ms
+- **AI Response Generation**: ~6-8 seconds
+- **Feedback Submission**: ~42ms
+- **Enhanced KB Population**: ~5-6 seconds
 
-### Intelligent Feedback Processing
-- **Automatic Categorization**: Feedback automatically categorized by type and domain
-- **Effectiveness Scoring**: AI calculates solution effectiveness scores
-- **Learning Priority**: Automatic prioritization for learning focus
-- **Pattern Recognition**: Identifies recurring issues and knowledge gaps
+### Success Criteria
+- **100% Step Success Rate** - All 7 workflow steps must complete successfully
+- **Total Execution Time**: Typically 15-20 seconds
+- **Data Integrity** - All generated IDs and responses must be valid
+- **Report Generation** - Comprehensive markdown report must be created
 
-### Enhanced Knowledge Base
-- **Solution Extraction**: Automatically extracts solutions from feedback
-- **Metadata Preservation**: Maintains context, user roles, and feedback history
-- **Category Organization**: Solutions organized by technical domain
-- **Priority Scoring**: High-priority solutions for critical learning areas
-
-### Real-time Dashboard
-- **Live Metrics**: Real-time feedback collection and learning metrics
-- **Agent Monitoring**: Live status of all AI agents
-- **System Health**: Comprehensive system health monitoring
-- **Interactive Queries**: Built-in knowledge base querying tool
-
-## 🔍 Usage Examples
-
-### Submit Feedback
-```bash
-curl -X POST http://localhost:8002/feedback \
-  -H "Content-Type: application/json" \
-  -d '{
-    "ticket_id": "TICKET-001",
-    "ai_solution": "Restart the service",
-    "human_solution": "Clear cache first, then restart service",
-    "feedback_type": "NEW_SOLUTION",
-    "user_role": "support_engineer",
-    "comments": "AI missed the cache clearing step",
-    "context": {"category": "technical", "priority": "high"}
-  }'
-```
-
-### Query Knowledge Base
-```bash
-# Get KB statistics
-curl http://localhost:8002/enhanced-kb/stats
-
-# Get technical solutions
-curl "http://localhost:8002/enhanced-kb/solutions/technical?limit=5"
-
-# Get all solutions
-curl "http://localhost:8002/enhanced-kb/solutions?limit=20"
-```
-
-### Dashboard Queries
-Use the built-in query tool in the React UI:
-1. **Sample Queries**: One-click access to common queries
-2. **Custom Queries**: Build your own queries with parameters
-3. **Query History**: Track and re-run previous queries
-4. **Real-time Results**: See results immediately
-
-## 📈 Learning Process
-
-### 1. Feedback Collection
-- User submits feedback via API or UI
-- FeedbackAgent processes and stores feedback
-- Effectiveness scores calculated automatically
-
-### 2. Learning Trigger
-- Non-perfect feedback triggers learning process
-- LearningAgent extracts insights and patterns
-- Knowledge gaps identified and tracked
-
-### 3. Knowledge Base Update
-- Solutions extracted from human feedback
-- Enhanced KB populated with new knowledge
-- Metadata preserved for context and learning
-
-### 4. Continuous Improvement
-- System learns from every feedback submission
-- Knowledge base grows with real-world solutions
-- Patterns identified for proactive improvements
-
-## 🧪 Testing
-
-### Backend Testing
-```bash
-cd cskb-feedback-agents
-source venv/bin/activate
-
-# Test API endpoints
-curl http://localhost:8002/system/health
-curl http://localhost:8002/agents/status
-curl http://localhost:8002/feedback
-```
-
-### Frontend Testing
-```bash
-cd cskb-feedback-agent-reactui
-
-# Run tests
-npm test
-
-# Build for production
-npm run build
-```
-
-## 🚀 Deployment
-
-### Production Build
-```bash
-# Backend
-cd cskb-feedback-agents
-pip install -r requirements.txt
-gunicorn main:app -w 4 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:8002
-
-# Frontend
-cd cskb-feedback-agent-reactui
-npm run build
-# Serve the build folder with your web server
-```
-
-### Docker (Optional)
-```dockerfile
-# Backend Dockerfile
-FROM python:3.12-slim
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install -r requirements.txt
-COPY . .
-CMD ["python", "main.py"]
-```
-
-## 🔧 Troubleshooting
+## 🚨 Troubleshooting
 
 ### Common Issues
+1. **API Connection Failed**
+   - Verify both services are running
+   - Check ports 8000 and 8002
+   - Ensure firewall settings allow local connections
 
-#### Backend Won't Start
-- Check if port 8002 is available
-- Verify virtual environment is activated
-- Check .env file configuration
+2. **PDF File Not Found**
+   - Verify PDF path: `../../pdf-files/technical_troubleshooting_guide.pdf`
+   - Check file permissions
+   - Ensure PDF file exists and is readable
 
-#### Empty Query Results
-- Ensure backend is running on port 8002
-- Check browser console for errors
-- Verify API endpoints are responding
-
-#### Knowledge Base Empty
-- Run `/enhanced-kb/populate` endpoint
-- Check LearningAgent is running
-- Verify feedback data exists
+3. **Enhanced KB Population Failed**
+   - Verify Feedback API is accessible
+   - Check API endpoint `/enhanced-kb/populate`
+   - Review request payload structure
 
 ### Debug Mode
-Enable debug logging in .env:
-```bash
-LOG_LEVEL=DEBUG
+Enable detailed logging by modifying the logging level:
+```python
+logging.basicConfig(level=logging.DEBUG, format='%(asctime)s - %(levelname)s - %(message)s')
 ```
 
-## 🤝 Contributing
+## 🔄 Future Enhancements
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+### Planned Features
+- **Parallel Execution** - Run independent steps concurrently
+- **Retry Logic** - Automatic retry for transient failures
+- **Multiple Document Types** - Support for various file formats
+- **Performance Benchmarking** - SLA monitoring and alerting
+- **Integration Testing** - End-to-end validation with real data
 
-## 📝 License
+### Extensibility
+The framework is designed to be easily extensible for:
+- Additional workflow steps
+- Different feedback mechanisms
+- Various knowledge base types
+- Custom reporting formats
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+## 📝 Contributing
 
-## 🙏 Acknowledgments
+### Development Guidelines
+1. **Code Style** - Follow PEP 8 Python conventions
+2. **Error Handling** - Implement comprehensive error handling
+3. **Logging** - Use structured logging with appropriate levels
+4. **Testing** - Add unit tests for new functionality
+5. **Documentation** - Update README and inline comments
 
-- **FastAPI**: High-performance web framework
-- **LanceDB**: Vector database for AI applications
-- **React**: Modern UI framework
-- **Tailwind CSS**: Utility-first CSS framework
+### Adding New Workflow Steps
+1. Create new method in the main class
+2. Add step recording with `record_step_result()`
+3. Update the main workflow method
+4. Add appropriate error handling
+5. Update the markdown report generation
 
-## 📞 Support
+## 📄 License
 
-For support and questions:
-- Create an issue in the GitHub repository
-- Check the troubleshooting section
-- Review the API documentation at `/docs` endpoint
+This project is part of the Customer Support Knowledge Base system. Please refer to the main project license for usage terms.
+
+## 🤝 Support
+
+For issues and questions:
+1. Check the troubleshooting section above
+2. Review the generated test reports for error details
+3. Check API service logs for backend issues
+4. Verify system requirements and dependencies
 
 ---
 
-**Built with ❤️ for intelligent customer support systems**
+*Last updated: August 30, 2025*
+*Version: 4.0 - Enhanced Workflow with Complete Feedback Loop*
