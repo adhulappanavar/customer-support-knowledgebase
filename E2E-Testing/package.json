@@ -1,0 +1,26 @@
+{
+  "name": "cskb-e2e-testing",
+  "version": "1.0.0",
+  "description": "End-to-End testing for CSKB Merged UI using Playwright",
+  "scripts": {
+    "test": "playwright test",
+    "test:ui": "playwright test --grep @ui",
+    "test:api": "playwright test --grep @api",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "test:report": "playwright show-report",
+    "install-browsers": "playwright install",
+    "setup": "npm run install-browsers && npm run test:setup",
+    "test:setup": "node scripts/setup-test-data.js",
+    "cleanup": "node scripts/cleanup-test-data.js"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.40.0",
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  },
+  "dependencies": {
+    "axios": "^1.6.0",
+    "dotenv": "^16.3.0"
+  }
+}
